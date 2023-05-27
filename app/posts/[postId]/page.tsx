@@ -3,7 +3,15 @@ import { getPostData, getSortedPostsData } from "@/lib/posts";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-export function generateMetadate({ params }: { params: { postId: string } }) {
+export function generateStaticParams() {
+  const posts = getSortedPostsData();
+
+  return posts.map((post) => ({
+    postId: post.id,
+  }));
+}
+
+export function generateMetadata({ params }: { params: { postId: string } }) {
   const posts = getSortedPostsData();
   const { postId } = params;
 
@@ -11,12 +19,12 @@ export function generateMetadate({ params }: { params: { postId: string } }) {
 
   if (!post) {
     return {
-      title: "Post notFound",
+      title: "Post Not Found",
     };
   }
 
   return {
-    title: post?.id,
+    title: post.title,
   };
 }
 
